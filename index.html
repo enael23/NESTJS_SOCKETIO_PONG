@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <canvas height="400" width="400"></canvas>
+    <canvas height="400" width="600"></canvas>
     <input type="text" id="messageBox" />
     <button onclick="envoyerMessage()">Envoyer</button><br/>
     <div id="messagesPrints"></div>
@@ -25,7 +25,7 @@
         //     ctx.clearRect(0, 0, canvas.width, canvas.height);
         // }
 
-        function render(ctx, pos, balX, balY){
+        function render(ctx, p1, p2, balX, balY){
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.beginPath();
             // ctx.rect(20, pos, 10, 100);
@@ -37,15 +37,17 @@
             // ctx.rect(balX, balY, 10, 10);
             // ctx.fillStyle = "black";
             // ctx.fill();
-            ctx.fillRect(5, pos, 10, 100);
+            ctx.fillRect(5, p1 - 40, 10, 80); //paddle1
+            ctx.fillRect(585, p2 - 40, 10, 80);
             ctx.fillRect(balX - 5, balY - 5, 10, 10);
-            ctx.strokeRect(0, 0, 400, 400);
+            ctx.strokeRect(0, 0, 600, 400);
         }
 
         socket.on('connect', ()=> console.log('Connected'));
 
         socket.on('message', function(id, data){
-            messagesPrints.innerHTML += `<p> ${id} : ${data} <\p>`;
+            // messagesPrints.innerHTML += `<p> ${id} : ${data} <\p>`;
+            messagesPrints.innerHTML = `<p> ${id} : ${data} <\p>`;
         });
 
         function envoyerMessage(){
@@ -68,10 +70,10 @@
 
         })
 
-        socket.on('key', function(pos, balX, balY){
+        socket.on('key', function(p1, p2, balX, balY){
             // messagesPrints.innerHTML += `<p> press <\p>`;
             // clear(ctx);
-            render(ctx, pos, balX, balY);
+            render(ctx, p1, p2, balX, balY);
         })
     </script>
 </body>
