@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <canvas height="400" width="400"></canvas>
+    <input type="text" id="messageBox" />
+    <button onclick="envoyerMessage()">Envoyer</button><br/>
+    <div id="messagesPrints"></div>
+
+    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
+    <script>
+        const socket = io('http://localhost:3000');
+        // const message = document.getElementById('messageBox');
+        // const messages = document.getElementById('messagesPrints');
+
+        const canvas = document.querySelector('canvas');
+        const ctx = canvas.getContext("2d");
+
+        // function clear(ctx){
+        //     messagesPrints.innerHTML += `<p> clear <\p>`;
+        //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // }
+
+        function render(ctx, pos, balX, balY){
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            // ctx.rect(20, pos, 10, 100);
+            // ctx.fillStyle = "black";
+            // ctx.fill();
+            // ctx.rect(balX, balY, 10, 10);
+            // ctx.fillStyle = "black";
+            // ctx.fill();
+            // ctx.rect(balX, balY, 10, 10);
+            // ctx.fillStyle = "black";
+            // ctx.fill();
+            ctx.fillRect(5, pos, 10, 100);
+            ctx.fillRect(balX - 5, balY - 5, 10, 10);
+            ctx.strokeRect(0, 0, 400, 400);
+        }
+
+        socket.on('connect', ()=> console.log('Connected'));
+
+        socket.on('message', function(id, data){
+            messagesPrints.innerHTML += `<p> ${id} : ${data} <\p>`;
+        });
+
+        function envoyerMessage(){
+            socket.emit('message', messageBox.value);
+        }
+
+        window.addEventListener('keydown', (e) => {
+            console.log('key pressed');
+            // socket.emit('message', "haut");
+            // if (e.key == 'ArrowUp') 
+                // messagesPrints.innerHTML += `<p> haut <\p>`;
+            socket.emit('keyPress', e.key);
+            // render(ctx);
+        })
+
+        window.addEventListener('keyup', (e) => {
+            console.log('key released');
+
+            socket.emit('keyRelease', e.key);
+
+        })
+
+        socket.on('key', function(pos, balX, balY){
+            // messagesPrints.innerHTML += `<p> press <\p>`;
+            // clear(ctx);
+            render(ctx, pos, balX, balY);
+        })
+    </script>
+</body>
+</html>
