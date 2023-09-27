@@ -104,13 +104,13 @@ export class SocketEvents {
             && this.balPosY > this.p1 - this.paddleHeight/2
             && this.balPosY < this.p1 + this.paddleHeight/2){
                 this.balVelX = -this.balVelX;
-                this.balVelY = -(this.p1 - this.balPosY)/4;
+                this.balVelY = -(this.p1 - this.balPosY)/6;
             }
         else if (this.balVelX > 0 && this.balPosX == this.width - this.paddleWidth
             && this.balPosY > this.p2 - this.paddleHeight/2
             && this.balPosY < this.p2 + this.paddleHeight/2){
                 this.balVelX = -this.balVelX;
-                this.balVelY = -(this.p2 - this.balPosY)/4;
+                this.balVelY = -(this.p2 - this.balPosY)/6;
             }
         else if (this.balPosX < this.balR){
                 this.p2Score++;
